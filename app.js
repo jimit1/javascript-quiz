@@ -59,20 +59,26 @@ $(document).ready(function () {
   function clearScreen() {
     $("#showOptions").html("");
     $("#showQuestion").html("");
+    $("#popUp").html("");
   }
 
+  setTimer();
   $("#submitBtn").on("click", function () {
     clearScreen();
-    setTimer();
     startQuiz();
   });
 
-  // $(document).on("click", "#option", function () {
-  // for (qCounter = 0; qCounter < questions.length; qCounter++) {
-  //   console.log(qCounter);
-  //   startQuiz();
-  // }
-  // }
+  $(document).on("click", "#option", function () {
+    if (qCounter < questions.length) {
+      qCounter++;
+      console.log(qCounter);
+      console.log(questions.length);
+      clearScreen();
+      startQuiz();
+    } else {
+      console.log("quiz is over");
+    }
+  });
 
   function startQuiz() {
     var humanChoice = 55;
