@@ -15,16 +15,20 @@
   <body>
     <header class="container-fluid d-flex justify-content-between">
       <div class="p-2">
-        <div id="startQuiz" class="d-inline bg-success mr-5">Start Quiz</div>
-        <div id="showHighScore" class="d-inline bg-success">View Highscore</div>
+        <div id="startQuiz" class="d-inline bg-success mr-5 btn">
+          Start Quiz
+        </div>
+        <div id="showHighScore" class="d-inline bg-success btn">
+          View Highscore
+        </div>
       </div>
       <div class="p-2" id="score"></div>
       <div class="p-2" id="timer"></div>
     </header>
     <div class="container mt-5">
-      <div class="card mb-3" style="max-width: 1000px;">
+      <div class="card" style="border: none; max-width: 1000px;">
         <div class="row no-gutters">
-          <div class="col-md-4">
+          <div class="col-md-4 align-items-center">
             <img
               src="./assets/image5.jpeg"
               class="card-img"
@@ -33,16 +37,20 @@
           </div>
           <div class="col-md-8" id="mainScreen">
             <div class="card-body">
-              <h5 class="card-title" id="showQuestion">Card title</h5>
+              <h5 class="card-title" id="showQuestion">
+                Coding Quiz Challenge
+              </h5>
               <p class="card-text" id="showOptions">
-                This is a wider card with supporting text below as a natural
-                lead-in to additional content. This content is a little bit
-                longer.
+                Try to answer the following code-related questions within the
+                time limit. Keep in mind that incorrect answers will penalize
+                your Timer by 5 seconds.
               </p>
               <p class="card-text" id="popUp">
-                <small class="text-muted">text here</small>
+                <small class="text-muted"
+                  >You have 50 seconds to complete the quiz</small
+                >
                 <br />
-                <button type="submit" id="submitBtn">Next</button>
+                <button type="submit" id="submitBtn">Start</button>
               </p>
             </div>
           </div>
