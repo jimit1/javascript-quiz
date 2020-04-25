@@ -80,7 +80,7 @@ $(document).ready(function () {
     timerInterval = setInterval(function () {
       timerCount--;
       $("#timer").text("Timer: " + timerCount);
-      if (timerCount === 0) {
+      if (timerCount < 1) {
         clearInterval(timerInterval);
       }
     }, 1000);
@@ -177,7 +177,7 @@ $(document).ready(function () {
     $("#showOptions").append(`<div>Enter your name here</div>`);
     $("#showOptions").append("<form id='form'></form>");
     $("#form").append(
-      "<input id='name' type='text' class='mr-3' placeholder='enter name here'></input>"
+      "<input id='name' autofocus type='text' class='mr-3' placeholder='enter name here'></input>"
     );
     $("#form").append(
       "<input id='btnSubmit' type='submit' value='Submit'></input>"
@@ -196,7 +196,7 @@ $(document).ready(function () {
   }
 
   function showHighScore() {
-    $("#resetHighScore").on("click", function () {
+    $(document).on("click", "#resetHighScore", function () {
       window.localStorage.removeItem("highScore");
       highScore = null;
       insertHighScoreTable();
@@ -227,7 +227,7 @@ $(document).ready(function () {
     $("#tr").append("<th scope='col'>Score</th>");
     $("#table").append("<tbody id='tbody'></tbody>");
     var showCount;
-    if (highScore != null) {
+    if (highScore !== null) {
       if (highScore.length < 8) {
         showCount = highScore.length;
       } else {
