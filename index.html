@@ -13,7 +13,9 @@
     <title>Coding Quiz Challenge</title>
   </head>
   <body>
-    <header class="container-fluid d-flex justify-content-between">
+    <header
+      class="container-fluid d-flex justify-content-between navbar navbar-dark bg-dark"
+    >
       <div class="p-2">
         <div id="startQuiz" class="d-inline bg-success mr-5 btn">
           Start Quiz
@@ -22,8 +24,8 @@
           View Highscore
         </div>
       </div>
-      <div class="p-2" id="score"></div>
-      <div class="p-2" id="timer"></div>
+      <div class="p-2 text-light" id="score"></div>
+      <div class="p-2 text-light" id="timer"></div>
     </header>
     <div class="container mt-5">
       <div class="card" style="border: none; max-width: 1000px;">
@@ -45,11 +47,11 @@
                 time limit. Keep in mind that incorrect answers will penalize
                 your Timer by 5 seconds.
               </p>
-              <p class="card-text" id="popUp">
-                <small class="text-muted"
+              <p class="card-text">
+                <small class="alert alert-success" id="popUp"
                   >You have 50 seconds to complete the quiz</small
                 >
-                <br />
+                <br /><br />
                 <button type="submit" id="submitBtn">Start</button>
               </p>
             </div>

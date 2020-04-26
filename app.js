@@ -66,7 +66,6 @@ $(document).ready(function () {
   var timerCount;
   var qCounter = 0;
   var humanChoice = 55;
-  var answer = "";
   try {
     var highScore = JSON.parse(window.localStorage.getItem("highScore"));
   } catch {
@@ -77,6 +76,7 @@ $(document).ready(function () {
   function setTimer() {
     timerCount = 50;
     $("#timer").text("Timer: " + timerCount);
+
     timerInterval = setInterval(function () {
       timerCount--;
       $("#timer").text("Timer: " + timerCount);
@@ -89,7 +89,6 @@ $(document).ready(function () {
   function clearScreen() {
     $("#showOptions").html("");
     $("#showQuestion").html("");
-    $("#popUp").html("");
   }
 
   function startQuiz() {
@@ -100,6 +99,8 @@ $(document).ready(function () {
       window.location.href = "index.html";
     });
     $("#submitBtn").on("click", function () {
+      $("#submitBtn").hide();
+      $("#popUp").hide();
       setTimer();
       clearScreen();
       nextQuestion();
@@ -124,16 +125,16 @@ $(document).ready(function () {
     $("#timer").text("Timer: " + timerCount);
   }
 
-  function showPopUp() {
-    var timerCount2 = 2;
-    var timerInterval2 = setInterval(function () {
-      timerCount2--;
-      $("#popUp").append(`<small class='text-muted'>${answer}</small>`);
-      if (timerCount2 === 0) {
-        clearInterval(timerInterval2);
-        $("#popUp").html("");
-      }
-    }, 500);
+  function showPopup(str, type, score) {
+    $("#popUp").show();
+    $("#popUp").attr("class", `alert alert-${type}`);
+    $("#popUp").text(str + ". Your score is " + score);
+    window.setTimeout(function () {
+      $("#popUp").hide();
+    }, 3000);
+    $("#popUp").on("click", function () {
+      $("#popUp").hide();
+    });
   }
 
   function continueQuiz() {
@@ -142,21 +143,19 @@ $(document).ready(function () {
       if (humanChoice === questions[qCounter].a) {
         score += Math.floor(Math.random() * (20 - 1) + 1);
         updateScoreTimer();
-        answer = "Correct";
+        showPopup("Correct answer", "success", score);
       } else {
         timerCount -= 5;
         updateScoreTimer();
-        answer = "Wrong";
+        showPopup("Wrong answer", "danger", score);
       }
-      showPopUp();
       qCounter++;
       clearScreen();
       if (timerCount > 0) {
         nextQuestion();
       } else {
         timerCount = 0;
-        answer = "You ran out of time";
-        showPopUp();
+        showPopup("You ran out of time", "warning", score);
         clearInterval(timerInterval);
         updateScoreTimer();
         enterInitials();
@@ -185,13 +184,18 @@ $(document).ready(function () {
     $(document).on("click", "#btnSubmit", function (e) {
       e.preventDefault();
       var $name = $("#name").val();
-      $("#name").val("");
-      if (highScore === null) {
-        highScore = [];
+
+      if (!$name) {
+        showPopup("Please enter a valid name", "info", score);
+      } else {
+        $("#name").val("");
+        if (highScore === null) {
+          highScore = [];
+        }
+        highScore.push({ $name, score });
+        window.localStorage.setItem("highScore", JSON.stringify(highScore));
+        showHighScore();
       }
-      highScore.push({ $name, score });
-      window.localStorage.setItem("highScore", JSON.stringify(highScore));
-      showHighScore();
     });
   }
 
@@ -215,31 +219,30 @@ $(document).ready(function () {
     $("#timer").text("");
     clearScreen();
     $(".card-img").attr("src", "./assets/highscore.jpeg");
-    $("#showQuestion").append("<div class='d-inline'>High Score</div>");
     $("#showQuestion").append(
-      "<div class='d-inline float-right btn' id='resetHighScore'>RESET Score</div>"
+      `<div class='d-inline'>High Score</div>
+      <div class='d-inline float-right btn' id='resetHighScore'>RESET Score</div>
+      <table class='table'>
+      <thead>
+      <th scope='col'>Rank</th>
+      <th scope='col'>Name</th>
+      <th scope='col'>Score</th>
+      </thead>
+      <tbody id='tbody'></tbody>
+      </table>`
     );
-    $("#showOptions").append("<table class='table' id='table'></table>");
-    $("#table").append("<thead id='thead'></thead>");
-    $("#thead").append("<tr id='tr'></tr>");
-    $("#tr").append("<th scope='col'>Rank</th>");
-    $("#tr").append("<th scope='col'>Name</th>");
-    $("#tr").append("<th scope='col'>Score</th>");
-    $("#table").append("<tbody id='tbody'></tbody>");
-    var showCount;
+    var showCount = 7;
     if (highScore !== null) {
-      if (highScore.length < 8) {
+      if (highScore.length < showCount) {
         showCount = highScore.length;
-      } else {
-        showCount = 7;
       }
-
       for (var i = 0; i < showCount; i++) {
-        var rank = i + 1;
-        $("#tbody").append(`<tr id='tr${i}'></tr>`);
-        $(`#tr${i}`).append(`<th scope='row'>${rank}</th>`);
-        $(`#tr${i}`).append(`<th>${highScore[i].$name}</th>`);
-        $(`#tr${i}`).append(`<th>${highScore[i].score}</th>`);
+        $("#tbody").append(
+          `<tr id='tr${i}'></tr>
+          <th scope='row'>${i + 1}</th>
+          <th>${highScore[i].$name}</th>
+          <th>${highScore[i].score}</th>`
+        );
       }
     }
   }
